@@ -1,0 +1,1 @@
+Basic blackjack game that will eventually have ability to judge player performace. Also developing a frontend at some point.
