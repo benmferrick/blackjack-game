@@ -103,7 +103,8 @@ func doAHand() Result {
     if (calcTotal(playerCards) == 21) {
         return WinNatural
     }
-	
+
+    //handles user turn to hit cards
 	for {
         if askForHit() {
             fmt.Println("User chose to hit.")
@@ -121,25 +122,35 @@ func doAHand() Result {
         }
     }
 
+    //handles dealer hits if <=16 or soft 17
+    for calcTotal(dealerCards) <= 16 || isSoft17(dealerCards) {
+        hit(&dealerCards)
+        fmt.Println("Dealer's cards:", dealerCards)
+        fmt.Println("Dealer Total:", calcTotal(dealerCards))
+    }
+
+    //handles tie
     if (calcTotal(dealerCards) == calcTotal(playerCards)) {
         return Push
     }
 
+    //returns win or loss if neither bust
     if (calcTotal(playerCards) > calcTotal(dealerCards)) {
         return WinBetterHand
     }
-
     return LoseWorseHand
 }
 
 // calcTotal calculates the total value of a slice of cards
 // where Ace is worth 11, and Jack, Queen, King are worth 10 each.
 func calcTotal(cards []Card) int {
+    aceCount := 0
     total := 0
     for _, card := range cards {
         switch card.rank {
         case Ace:
             total += 11
+            aceCount += 1
         case Jack, Queen, King:
             total += 10
         case Two:
@@ -162,7 +173,53 @@ func calcTotal(cards []Card) int {
             total += 10
         }
     }
+
+    if (total > 21) {
+        for aceCount > 0 {
+            total -= 10
+            aceCount -= 1
+        }
+    }
+
     return total
+}
+
+func isSoft17(cards []Card) bool {
+    aceCount := 0
+    total := 0
+    for _, card := range cards {
+        switch card.rank {
+        case Ace:
+            total += 11
+            aceCount += 1
+        case Jack, Queen, King:
+            total += 10
+        case Two:
+            total += 2
+        case Three:
+            total += 3
+        case Four:
+            total += 4
+        case Five:
+            total += 5
+        case Six:
+            total += 6
+        case Seven:
+            total += 7
+        case Eight:
+            total += 8
+        case Nine:
+            total += 9
+        case Ten:
+            total += 10
+        }
+    }
+
+    if (total == 17 && aceCount == 1) {
+        return true
+    }
+
+    return false
 }
 
 func main() {
