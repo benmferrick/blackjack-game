@@ -26,6 +26,9 @@ const (
     LoseWorseHand Result = "LoseWorseHand"
     LoseDealerNatural Result = "LoseDealerNatural"
     Push Result = "Push"
+    SplitBothWin Result = "SplitBothWin"
+    SplitBothLose Result = "SplitBothLose"
+    SplitPush Result = "SplitPush"
 )
 
 
@@ -86,6 +89,16 @@ func askForHit() bool {
     return strings.ToLower(input) == "yes"
 }
 
+func askForSplit() bool {
+    reader := bufio.NewReader(os.Stdin)
+    fmt.Print("Do you want to split? (yes/no): ")
+    input, _ := reader.ReadString('\n') // Read the input until the newline character
+    input = strings.TrimSpace(input) // Trim whitespace and newline characters
+
+    // Check the input and return true if the user wants to hit
+    return strings.ToLower(input) == "yes"
+}
+
 //runs one hand
 func doAHand(playerCards []Card, dealerCards []Card) Result {
     fmt.Println("Player's cards:", playerCards)
@@ -104,8 +117,9 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
     }
 
     if (isSplit(playerCards)) {
-        fmt.Println("Do you want to split?")
-        return splitHandler(playerCards)
+        if askForSplit() {
+            return splitHandler(playerCards, dealerCards)
+        }
     }
 
     //handles user turn to hit cards
@@ -226,18 +240,25 @@ func isSoft17(cards []Card) bool {
     return false
 }
 
-func splitHandler(playerCards []Card) string {
-    firstCard := doAHand(playerCards[0])
-    secondCard := doAHand(playerCards[1])
-    
+func splitHandler(playerCards []Card, dealerCards []Card) Result {
 
-    return "yes"
+    firstCard := doAHand(playerCards[:0], dealerCards)
+    secondCard := doAHand(playerCards[1:], dealerCards)
+    
+    if (0 < 1) {
+        return secondCard
+    }
+
+    return firstCard
 }
 
 func isSplit(playerCards []Card) bool {
-    if (playerCards[0].rank == playerCards[1].rank) {
+    if playerCards[0].rank == playerCards[1].rank {
         return true
     }
+
+    if playerCards[0].rank == 
+
     return false
 }
 
