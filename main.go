@@ -29,6 +29,7 @@ const (
     SplitBothWin Result = "SplitBothWin"
     SplitBothLose Result = "SplitBothLose"
     SplitPush Result = "SplitPush"
+    WaitingOtherHand Result = "WaitingOtherHand"
 )
 
 
@@ -101,6 +102,8 @@ func askForSplit() bool {
 
 //runs one hand
 func doAHand(playerCards []Card, dealerCards []Card) Result {
+    split := false
+
     fmt.Println("Player's cards:", playerCards)
     fmt.Println("Player Total:", calcTotal(playerCards))
     fmt.Println("Dealer's cards:", dealerCards)
@@ -118,6 +121,7 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
 
     if (isSplit(playerCards)) {
         if askForSplit() {
+            split = true
             return splitHandler(playerCards, dealerCards)
         }
     }
@@ -138,6 +142,11 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
             fmt.Println("User chose not to hit.")
             break // Exit the loop if the user chooses not to hit
         }
+    }
+
+    if split {
+        split = false
+        return WaitingOtherHand
     }
 
     //handles dealer hits if <=16 or soft 17
