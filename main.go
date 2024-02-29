@@ -102,7 +102,6 @@ func askForSplit() bool {
 
 //runs one hand
 func doAHand(playerCards []Card, dealerCards []Card) Result {
-    split := false
 
     fmt.Println("Player's cards:", playerCards)
     fmt.Println("Player Total:", calcTotal(playerCards))
@@ -110,19 +109,18 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
     fmt.Println("Dealer Total:", calcTotal(dealerCards))
 
     //handles dealer getting 21 with first two cards
-    if (calcTotal(dealerCards) == 21) {
+    if calcTotal(dealerCards) == 21 {
         return LoseDealerNatural
     }
 
     //if dealer does not have 21 and user does, automatic win for user
-    if (calcTotal(playerCards) == 21) {
+    if calcTotal(playerCards) == 21 {
         return WinNatural
     }
 
     if (isSplit(playerCards)) {
         if askForSplit() {
-            split = true
-            return splitHandler(playerCards, dealerCards)
+            
         }
     }
 
@@ -144,11 +142,6 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
         }
     }
 
-    if split {
-        split = false
-        return WaitingOtherHand
-    }
-
     //handles dealer hits if <=16 or soft 17
     for calcTotal(dealerCards) <= 16 || isSoft17(dealerCards) {
         hit(&dealerCards)
@@ -157,12 +150,12 @@ func doAHand(playerCards []Card, dealerCards []Card) Result {
     }
 
     //handles tie
-    if (calcTotal(dealerCards) == calcTotal(playerCards)) {
+    if calcTotal(dealerCards) == calcTotal(playerCards) {
         return Push
     }
 
     //returns win or loss if neither bust
-    if (calcTotal(playerCards) > calcTotal(dealerCards)) {
+    if calcTotal(playerCards) > calcTotal(dealerCards) {
         return WinBetterHand
     }
     return LoseWorseHand
@@ -247,18 +240,6 @@ func isSoft17(cards []Card) bool {
     }
 
     return false
-}
-
-func splitHandler(playerCards []Card, dealerCards []Card) Result {
-
-    firstCard := doAHand(playerCards[0:1], dealerCards)
-    secondCard := doAHand(playerCards[1:2], dealerCards)
-    
-    if (0 < 1) {
-        return secondCard
-    }
-
-    return firstCard
 }
 
 func isSplit(playerCards []Card) bool {
