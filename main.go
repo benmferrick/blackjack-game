@@ -242,8 +242,8 @@ func isSoft17(cards []Card) bool {
 
 func splitHandler(playerCards []Card, dealerCards []Card) Result {
 
-    firstCard := doAHand(playerCards[:0], dealerCards)
-    secondCard := doAHand(playerCards[1:], dealerCards)
+    firstCard := doAHand(playerCards[0:1], dealerCards)
+    secondCard := doAHand(playerCards[1:2], dealerCards)
     
     if (0 < 1) {
         return secondCard
@@ -256,8 +256,6 @@ func isSplit(playerCards []Card) bool {
     if playerCards[0].rank == playerCards[1].rank {
         return true
     }
-
-    if playerCards[0].rank == 
 
     return false
 }
