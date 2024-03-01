@@ -251,6 +251,8 @@ func isSplit(playerCards []Card) bool {
 }
 
 func main() {
+
+    //get a commmit in today
     
     playerCards, dealerCards := deal()
     println(doAHand(playerCards, dealerCards))
